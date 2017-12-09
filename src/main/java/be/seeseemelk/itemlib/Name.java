@@ -12,6 +12,7 @@ public class Name
 		this.id = id;
 		
 		StringBuilder builder = new StringBuilder(name.length() + id);
+		builder.append(name);
 		for (int i = 0; i < id; i++)
 		{
 			builder.append(Character.NON_SPACING_MARK);

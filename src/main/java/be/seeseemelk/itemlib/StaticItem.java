@@ -1,7 +1,8 @@
 package be.seeseemelk.itemlib;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class StaticItem extends ItemStack
 {
@@ -13,11 +14,11 @@ public abstract class StaticItem extends ItemStack
 	 */
 	protected StaticItem(String name, Material material)
 	{
-		ItemLib itemLib = ItemLib.getItemLib();
-		if (!itemLib.hasBeenInitialized())
-		{
-			itemLib.initialize(this.name);
-		}
+		super(material);
+		this.name = ItemLib.getItemLib().getName(name);
+		ItemMeta meta = getItemMeta();
+		meta.setDisplayName(this.name.toString());
+		setItemMeta(meta);
 	}
 	
 	/**
@@ -30,15 +31,6 @@ public abstract class StaticItem extends ItemStack
 	}
 	
 	/**
-	 * Set the name of the item.
-	 * @param name The name to give to the item.
-	 */
-	public void setName(String name)
-	{
-		this.name = ItemLib.getItemLib().toName(ChatColor.RESET + name);
-	}
-	
-	/**
 	 * Get the actual name of the item.
 	 * @return The {@link Name} of the object.
 	 */
@@ -46,4 +38,5 @@ public abstract class StaticItem extends ItemStack
 	{
 		return name;
 	}
+	
 }

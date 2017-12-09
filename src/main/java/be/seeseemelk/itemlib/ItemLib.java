@@ -1,9 +1,7 @@
 package be.seeseemelk.itemlib;
 
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -12,7 +10,9 @@ import org.bukkit.inventory.ItemStack;
 public class ItemLib
 {
 	private static ItemLib itemLib;
-	private Map<Name, StaticItem> items = new HashSet<>();
+	private Map<String, Integer> itemNameCounts = new HashMap<>();
+	private Map<String, StaticItem> itemsByName = new HashMap<>();
+	private Map<Class<? extends StaticItem>, StaticItem> itemsByClass = new HashMap<>();
 	
 	/**
 	 * Get the currently running instance of {@code ItemLib}.
@@ -36,40 +36,107 @@ public class ItemLib
 	}
 	
 	/**
-	 * Converts a string to a name object.
-	 * @param name The name to convert.
-	 * @return The converted name.
+	 * Store a new item in the internal maps.
+	 * @param item The item to store.
 	 */
-	public Name toName(String name)
+	private void storeItem(StaticItem item)
 	{
-		int id = 0;
-		for (Name otherName : items.keySet())
-		{
-			if (name.equals(otherName.getName()))
-			{
-				id++;
-			}
-		}
-		return new Name(name, id);
+		itemsByName.put(item.getActualName().toString(), item);
+		itemsByClass.put(item.getClass(), item);
+	}
+	
+	/**
+	 * Get an item by the name of the item.
+	 * @param name The name of the item.
+	 * @return The item or {@code null} if no such item exists.
+	 */
+	private StaticItem getItem(String name)
+	{
+		return itemsByName.get(name);
+	}
+	
+	/**
+	 * Get an item by the name of the item.
+	 * @param name The name of the item.
+	 * @return The item or {@code null} if no such item exists.
+	 */
+	@SuppressWarnings("unused")
+	private StaticItem getItem(Name name)
+	{
+		return getItem(name.toString());
 	}
 	
 	/**
 	 * Registers a new item.
 	 * @param item The new item to register
 	 */
-	public void registerItem(Class<? extends StaticItem> item)
+	public void registerItem(StaticItem item)
 	{
-		item.newInstance();
-		/*Name name = item.getActualName();
-		if (!items.containsKey(name))
+		if (!isRegistered(item.getClass()))
 		{
-			items.put(item.getActualName(), item);
-			return item;
+			storeItem(item);
 		}
 		else
 		{
 			throw new IllegalStateException("Already registered");
-		}*/
+		}
+	}
+
+	/**
+	 * Converts a string to a name object.
+	 * @param name The name to convert.
+	 * @return The converted name.
+	 */
+	public Name getName(String name)
+	{
+		if (itemNameCounts.containsKey(name))
+		{
+			int id = itemNameCounts.get(name) + 1;
+			itemNameCounts.put(name, id);
+			return new Name(name, id);
+		}
+		else
+		{
+			itemNameCounts.put(name, 0);
+			return new Name(name, 0);
+		}
+	}
+
+	/**
+	 * Get an item by the class of the item.
+	 * @param type The type of item to get.
+	 * @return The item or {@code null} if no such item has been registered.
+	 */
+	public StaticItem getItem(Class<? extends StaticItem> type)
+	{
+		return itemsByClass.get(type);
+	}
+	
+	/**
+	 * Check if an item type has been registered yet.
+	 * @param type The type of item to check for.
+	 * @return {@code true} if the item has been registered, {@code false} if it has not been registered.
+	 */
+	public boolean isRegistered(Class<? extends StaticItem> type)
+	{
+		return itemsByClass.get(type) != null;
+	}
+	
+	/**
+	 * Get an itemstack of the item.
+	 * @param type The type of item to get an itemstack of.
+	 * @return An itemstack of the item.
+	 */
+	public ItemStack getItemStack(Class<? extends StaticItem> type)
+	{
+		if (isRegistered(type))
+		{
+			return new ItemStack(getItem(type));
+		}
+		else
+		{
+			throw new IllegalArgumentException("Not a registered type");
+		}
 	}
 	
 	/**
@@ -79,7 +146,7 @@ public class ItemLib
 	 */
 	public boolean isItem(ItemStack item)
 	{
-		if (item)
+		return false;
 	}
 	
 	@EventHandler
