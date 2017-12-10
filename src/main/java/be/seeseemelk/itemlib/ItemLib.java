@@ -3,8 +3,6 @@ package be.seeseemelk.itemlib;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemLib
@@ -214,11 +212,5 @@ public class ItemLib
 	public boolean is(ItemStack item, Class<? extends StaticPluginItem> type)
 	{
 		return isItem(item) && getType(item).getClass().equals(type);
-	}
-	
-	@EventHandler
-	private void onPlayerInteract(PlayerInteractEvent event)
-	{
-		// ItemStack item = event.getItem();
 	}
 }
