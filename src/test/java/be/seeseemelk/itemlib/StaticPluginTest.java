@@ -24,7 +24,7 @@ public class StaticPluginTest
 	public void new_Default_ItemNameSet()
 	{
 		assertTrue(item.hasItemMeta());
-		assertEquals("Test Item", item.getItemMeta().getDisplayName());
+		assertEquals(Name.PADDING + "Test Item", item.getItemMeta().getDisplayName());
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class StaticPluginTest
 
 }
 
-class StaticPluginTestItem extends StaticItem
+class StaticPluginTestItem extends StaticPluginItem
 {
 
 	protected StaticPluginTestItem()

@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,7 +79,7 @@ public class ItemLibTest
 	{
 		Name name = lib.getName("Placebo");
 		assertEquals("Placebo", name.getName());
-		assertEquals("Placebo", name.toString());
+		assertEquals(Name.PADDING + "Placebo", name.toString());
 		assertEquals(0, name.getId());
 	}
 	
@@ -106,11 +107,89 @@ public class ItemLibTest
 		lib.registerItem(new TestItem());
 		ItemStack item = lib.getItemStack(TestItem.class);
 		assertEquals(Material.STICK, item.getType());
-		assertEquals("Test Item", item.getItemMeta().getDisplayName());
+		assertEquals(Name.PADDING + "Test Item", item.getItemMeta().getDisplayName());
 	}
+	
+	@Test
+	public void isItem_NoneRegisteredAndNoCustomName_False()
+	{
+		ItemStack item = new ItemStack(Material.STICK);
+		assertFalse(lib.isItem(item));
+	}
+	
+	@Test
+	public void isItem_NoneRegisteredAndCustomName_False()
+	{
+		ItemStack item = new ItemStack(Material.STICK);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName("Test Item");
+		item.setItemMeta(meta);
+		assertFalse(lib.isItem(item));
+	}
+	
+	@Test
+	public void isItem_OneRegisteredWithDifferentName_False()
+	{
+		lib.registerItem(new TestItem());
+		ItemStack item = new ItemStack(Material.STICK);
+		assertFalse(lib.isItem(item));
+	}
+	
+	@Test
+	public void isItem_OneRegisteredWithSameName_False()
+	{
+		lib.registerItem(new TestItem());
+		ItemStack item = new ItemStack(Material.STICK);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName("Test Item");
+		item.setItemMeta(meta);
+		assertFalse(lib.isItem(item));
+	}
+	
+	@Test
+	public void isItem_RegisteredItem_True()
+	{
+		lib.registerItem(new TestItem());
+		ItemStack item = lib.getItemStack(TestItem.class);
+		assertTrue(lib.isItem(item));
+	}
+	
+	@Test
+	public void getType_NotRegisteredItem_Null()
+	{
+		lib.registerItem(new TestItem());
+		ItemStack item = new ItemStack(Material.STICK);
+		assertNull(lib.getType(item));
+	}
+	
+	@Test
+	public void getType_RegisteredItem_CorrectClass()
+	{
+		TestItem type = new TestItem();
+		lib.registerItem(type);
+		ItemStack item = lib.getItemStack(TestItem.class);
+		assertEquals(type, lib.getType(item));
+	}
+	
+	@Test
+	public void is_NotRegisteredItem_False()
+	{
+		lib.registerItem(new TestItem());
+		ItemStack item = new ItemStack(Material.STICK);
+		assertFalse(lib.is(item, TestItem.class));
+	}
+	
+	@Test
+	public void is_RegisteredItem_True()
+	{
+		lib.registerItem(new TestItem());
+		ItemStack item = lib.getItemStack(TestItem.class);
+		assertTrue(lib.is(item, TestItem.class));
+	}
+	
 }
 
-class TestItem extends StaticItem
+class TestItem extends StaticPluginItem
 {
 
 	protected TestItem()

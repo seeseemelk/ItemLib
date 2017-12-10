@@ -2,6 +2,7 @@ package be.seeseemelk.itemlib;
 
 public class Name
 {
+	public static final char PADDING = Character.NON_SPACING_MARK;
 	private final String name;
 	private final int id;
 	private final String actualName;
@@ -11,11 +12,12 @@ public class Name
 		this.name = name;
 		this.id = id;
 		
-		StringBuilder builder = new StringBuilder(name.length() + id);
+		StringBuilder builder = new StringBuilder(name.length() + id + 0);
+		builder.append(PADDING);
 		builder.append(name);
 		for (int i = 0; i < id; i++)
 		{
-			builder.append(Character.NON_SPACING_MARK);
+			builder.append(PADDING);
 		}
 		
 		this.actualName = builder.toString();

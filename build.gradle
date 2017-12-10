@@ -64,3 +64,4 @@ tasks.check.dependsOn(jacocoTestReport)
 
 eclipse.classpath.downloadJavadoc = true
 eclipse.classpath.downloadSources = true
+eclipse.project.referencedProjects 'MockBukkit'

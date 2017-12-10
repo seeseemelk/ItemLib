@@ -4,7 +4,18 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class StaticItem extends ItemStack
+/**
+ * A static plugin item is an item that is created by a different plugin but uses the same
+ * instance for every itemstack.
+ * This makes the items easily stackable, but you won't be able to store different information for
+ * each instance of the item.
+ * A {@code StaticPluginItem} class should only be instantiated once, and that instance should
+ * then be passed on the {@link ItemLib#registerItem(StaticPluginItem)}.
+ * When you went to create actual item stacks of the item, {@link ItemLib#getItemStack(Class)} is your friend.
+ * @author seeseemelk
+ *
+ */
+public abstract class StaticPluginItem extends ItemStack
 {
 	private Name name;
 	
@@ -12,7 +23,7 @@ public abstract class StaticItem extends ItemStack
 	 * Creates a new static item with the given name.
 	 * @param name The name to give to the item.
 	 */
-	protected StaticItem(String name, Material material)
+	protected StaticPluginItem(String name, Material material)
 	{
 		super(material);
 		this.name = ItemLib.getItemLib().getName(name);
