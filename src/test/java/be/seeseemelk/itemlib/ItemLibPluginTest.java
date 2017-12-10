@@ -2,6 +2,7 @@ package be.seeseemelk.itemlib;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,12 @@ public class ItemLibPluginTest
 	{
 		MockBukkit.mock();
 		MockBukkit.load(ItemLibPlugin.class);
+	}
+	
+	@After
+	public void tearDown()
+	{
+		MockBukkit.unload();
 	}
 
 	@Test

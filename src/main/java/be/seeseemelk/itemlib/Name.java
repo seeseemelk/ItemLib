@@ -1,8 +1,10 @@
 package be.seeseemelk.itemlib;
 
+import org.bukkit.ChatColor;
+
 public class Name
 {
-	public static final char PADDING = Character.NON_SPACING_MARK;
+	public static final String PADDING = ChatColor.RESET.toString();
 	private final String name;
 	private final int id;
 	private final String actualName;

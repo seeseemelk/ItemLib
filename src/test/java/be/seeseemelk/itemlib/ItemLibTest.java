@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +25,12 @@ public class ItemLibTest
 		MockBukkit.mock();
 		ItemLib.instantiate();
 		lib = ItemLib.getItemLib();
+	}
+	
+	@After
+	public void tearDown()
+	{
+		MockBukkit.unload();
 	}
 	
 	@Test

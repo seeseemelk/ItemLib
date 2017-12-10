@@ -36,7 +36,7 @@ dependencies {
 
 jar.doLast() {
 	project.copy {
-		from 'build/libs/itemlib.jar'
+		from 'build/libs/ItemLib.jar'
 		into './'
 	}
 }
@@ -46,9 +46,11 @@ task wrapper(type: Wrapper) {
 }
 
 task deploy(dependsOn: 'jar') {
-	project.copy() {
-		from 'itemlib.jar'
-		into 'server/plugins/'
+	doLast {
+		project.copy() {
+		from 'build/libs/ItemLib.jar'
+		into './server/plugins/'
+		}
 	}
 }
 

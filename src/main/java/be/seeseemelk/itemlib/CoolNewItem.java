@@ -6,6 +6,6 @@ public class CoolNewItem extends StaticPluginItem
 {
 	public CoolNewItem()
 	{
-		super("My cool new item", Material.NETHER_WARTS);
+		super("My cool new item", Material.STICK);
 	}
 }

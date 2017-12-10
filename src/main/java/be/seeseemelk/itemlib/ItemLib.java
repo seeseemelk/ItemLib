@@ -30,6 +30,14 @@ public class ItemLib
 		itemLib = new ItemLib();
 	}
 	
+	/**
+	 * Removes the static reference to the {@code ItemLib} singleton.
+	 */
+	protected static void deinstantiate()
+	{
+		itemLib = null;
+	}
+
 	protected ItemLib()
 	{
 	}

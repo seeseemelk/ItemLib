@@ -3,6 +3,7 @@ package be.seeseemelk.itemlib;
 import static org.junit.Assert.*;
 
 import org.bukkit.Material;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +19,12 @@ public class StaticPluginTest
 		MockBukkit.mock();
 		ItemLib.instantiate();
 		item = new StaticPluginTestItem();
+	}
+	
+	@After
+	public void tearDown()
+	{
+		MockBukkit.unload();
 	}
 	
 	@Test
