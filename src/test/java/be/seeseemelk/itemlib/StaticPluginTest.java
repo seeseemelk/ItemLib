@@ -17,7 +17,7 @@ public class StaticPluginTest
 	public void setUp()
 	{
 		MockBukkit.mock();
-		ItemLib.instantiate();
+		ItemLib.instantiate(null);
 		item = new StaticPluginTestItem();
 	}
 	

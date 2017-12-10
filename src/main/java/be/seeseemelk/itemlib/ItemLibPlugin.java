@@ -25,7 +25,7 @@ public class ItemLibPlugin extends JavaPlugin
 	@Override
 	public void onLoad()
 	{
-		ItemLib.instantiate();
+		ItemLib.instantiate(this);
 	}
 	
 	@Override
@@ -37,7 +37,9 @@ public class ItemLibPlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		ItemLib.getItemLib().registerItem(new CoolNewItem());
+		ItemLib.getItemLib().enable();
+		
+		ItemLib.getItemLib().registerItem(this, new CoolNewItem());
 		for (Player player : Bukkit.getOnlinePlayers())
 		{
 			ItemStack item = ItemLib.getItemLib().getItemStack(CoolNewItem.class);
