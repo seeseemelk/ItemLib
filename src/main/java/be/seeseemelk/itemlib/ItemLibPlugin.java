@@ -19,7 +19,7 @@ public class ItemLibPlugin extends JavaPlugin
 	}
 	
 	@Override
-	public void onEnable()
+	public void onLoad()
 	{
 		ItemLib.instantiate();
 	}
