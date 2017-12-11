@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.MockPlugin;
 
 public class ItemLibTest
 {
@@ -231,6 +232,21 @@ public class ItemLibTest
 		lib.callEvent(null, event);
 	}
 	
+	@Test
+	public void unloadPlugin_ItemRegistered_ItemUnregistered()
+	{
+		MockPlugin plugin = MockBukkit.createMockPlugin();
+		TestItem item = new TestItem();
+		lib.registerItem(plugin, item);
+		ItemStack itemstack = lib.getItemStack(TestItem.class);
+		assertTrue(lib.isItem(itemstack));
+		assertTrue(lib.isRegistered(TestItem.class));
+		
+		lib.unloadPlugin(plugin);
+		assertFalse(lib.isItem(itemstack));
+		assertFalse(lib.isRegistered(TestItem.class));
+	}
+	
 }
 
 class TestItem extends StaticPluginItem
@@ -249,7 +265,6 @@ class TestItem extends StaticPluginItem
 	}
 	
 }
-
 
 
 

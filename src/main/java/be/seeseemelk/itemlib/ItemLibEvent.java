@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ItemLibEvent implements Listener
@@ -42,6 +43,19 @@ public class ItemLibEvent implements Listener
 		this.plugin = plugin;
 		this.lib = lib;
 	}
+	
+	/*
+	 * These events will control ItemLib itself.
+	 */
+	@EventHandler
+	public void onPluginDisable(PluginDisableEvent event)
+	{
+		lib.unloadPlugin(event.getPlugin());
+	}
+	
+	/*
+	 * These events should be passed through to individual items.
+	 */
 	
 	@EventHandler
 	public void onBlockDamage(BlockDamageEvent event)

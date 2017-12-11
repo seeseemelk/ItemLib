@@ -2,14 +2,16 @@ package be.seeseemelk.itemlib;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class ItemLib
 {
@@ -18,7 +20,7 @@ public class ItemLib
 	private Map<String, Integer> itemNameCounts = new HashMap<>();
 	private Map<String, StaticPluginItem> itemsByName = new HashMap<>();
 	private Map<Class<? extends StaticPluginItem>, StaticPluginItem> itemsByClass = new HashMap<>();
-	private Map<Class<? extends StaticPluginItem>, JavaPlugin> pluginsByClass = new HashMap<>();
+	private Map<Plugin, List<StaticPluginItem>> itemsByPlugin = new HashMap<>();
 
 	/**
 	 * Get the currently running instance of {@code ItemLib}.
@@ -62,34 +64,18 @@ public class ItemLib
 	 * @param plugin The plugin that owns the item.
 	 * @param item The item to store.
 	 */
-	private void storeItem(JavaPlugin plugin, StaticPluginItem item)
+	private void storeItem(Plugin plugin, StaticPluginItem item)
 	{
 		itemsByName.put(item.getActualName().toString(), item);
 		itemsByClass.put(item.getClass(), item);
-		pluginsByClass.put(item.getClass(), plugin);
-	}
-
-	/**
-	 * Get an item by the name of the item.
-	 * 
-	 * @param name The name of the item.
-	 * @return The item or {@code null} if no such item exists.
-	 */
-	private StaticPluginItem getItem(String name)
-	{
-		return itemsByName.get(name);
-	}
-
-	/**
-	 * Get an item by the name of the item.
-	 * 
-	 * @param name The name of the item.
-	 * @return The item or {@code null} if no such item exists.
-	 */
-	@SuppressWarnings("unused")
-	private StaticPluginItem getItem(Name name)
-	{
-		return getItem(name.toString());
+		
+		List<StaticPluginItem> items = itemsByPlugin.get(plugin);
+		if (items == null)
+		{
+			items = new ArrayList<>();
+			itemsByPlugin.put(plugin, items);
+		}
+		items.add(item);
 	}
 
 	/**
@@ -138,6 +124,20 @@ public class ItemLib
 			}
 		}
 	}
+	
+	/**
+	 * Unload all items made by a certain plugin.
+	 * @param plugin The plugin to unload.
+	 */
+	protected void unloadPlugin(Plugin plugin)
+	{
+		for (StaticPluginItem item : itemsByPlugin.get(plugin))
+		{
+			itemsByName.remove(item.getActualName().toString());
+			itemsByClass.remove(item.getClass());
+		}
+		itemsByPlugin.remove(plugin);
+	}
 
 	/**
 	 * Registers a new item.
@@ -145,7 +145,7 @@ public class ItemLib
 	 * @param plugin The plugin that is registering the item.
 	 * @param item The new item to register
 	 */
-	public void registerItem(JavaPlugin plugin, StaticPluginItem item)
+	public void registerItem(Plugin plugin, StaticPluginItem item)
 	{
 		if (!isRegistered(item.getClass()))
 		{
