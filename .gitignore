@@ -10,6 +10,3 @@
 
 # Ignore server folder
 /server
-
-# Ignore dependency projects
-/MockBukkit

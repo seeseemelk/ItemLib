@@ -16,13 +16,9 @@ targetCompatibility = 1.8
 repositories {
 	jcenter()
 	
-	maven {
-		url 'https://hub.spigotmc.org/nexus/content/repositories/public/' 
-	}
-
-	maven {
-		url 'http://repo.md-5.net/content/groups/public/'
-	}
+	maven { url 'https://hub.spigotmc.org/nexus/content/repositories/public/' }
+	maven { url 'http://repo.md-5.net/content/groups/public/' }
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -31,7 +27,8 @@ dependencies {
 
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.mockito:mockito-core:2.8.47'
-	testCompile project(':MockBukkit')
+	//testCompile project(':MockBukkit')
+	testCompile 'com.github.seeseemelk:MockBukkit:master-SNAPSHOT'
 }
 
 jar.doLast() {
@@ -49,7 +46,7 @@ task deploy(dependsOn: 'jar') {
 	doLast {
 		project.copy() {
 		from 'build/libs/ItemLib.jar'
-		into './server/plugins/'
+		into rootProject.projectDir + '/server/plugins/'
 		}
 	}
 }
